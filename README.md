@@ -17,6 +17,7 @@ The application of Yaho Coding Challenge
     1. Get list user from api.
     2. There are 2 mode view list: list view and grid view.
     3. You can switch dark and light mode easily.
+    4. Of course lazy loading and pull to refresh are available.
 
 ### How to run
     1. Install Flutter <br> https://docs.flutter.dev/get-started/install

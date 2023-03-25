@@ -58,35 +58,47 @@ class _ListUsersViewState extends State<ListUsersView> {
         children: [
           BlocBuilder<ListUserCubit, ListUserState>(
             buildWhen: (previous, current) =>
-                current is ListUserSwitchModeViewState,
-            builder: (_, state) => Padding(
-              padding: const EdgeInsets.only(
-                top: 16,
-                right: 16,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: _cubit.switchModeView,
-                    child: Icon(
-                      _cubit.isGrid ? Icons.table_rows : Icons.grid_view,
-                      color: AppTheme.of(context).currentThemeKey ==
-                              AppThemeKeys.dark
-                          ? Colors.white
-                          : Colors.black,
+                current is ListUserSwitchModeViewState ||
+                current is ListUserErrorState,
+            builder: (_, state) => state is ListUserErrorState
+                ? const SizedBox.shrink()
+                : Padding(
+                    padding: const EdgeInsets.only(
+                      top: 16,
+                      right: 16,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: _cubit.switchModeView,
+                          child: Icon(
+                            _cubit.isGrid ? Icons.table_rows : Icons.grid_view,
+                            color: AppTheme.of(context).currentThemeKey ==
+                                    AppThemeKeys.dark
+                                ? Colors.white
+                                : Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
           ),
           Expanded(
             child: BlocBuilder<ListUserCubit, ListUserState>(
                 buildWhen: (previous, current) =>
                     current is ListUserLoadingState ||
-                    current is ListUserDoneState,
+                    current is ListUserDoneState ||
+                    current is ListUserErrorState,
                 builder: (_, state) {
+                  if (state is ListUserErrorState) {
+                    return Center(
+                      child: Text(
+                        'You should check your internet connection',
+                        style: Theme.of(context).textTheme.subtitle1,
+                      ),
+                    );
+                  }
                   if (state is ListUserLoadingState) {
                     return Center(
                       child: CircularProgressIndicator(
