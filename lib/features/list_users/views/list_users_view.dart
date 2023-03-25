@@ -98,71 +98,7 @@ class _ListUsersViewState extends State<ListUsersView> {
                     return RefreshIndicator(
                       onRefresh: () => _cubit.onRefresh(),
                       child: _cubit.isGrid
-                          ? GridView.builder(
-                              controller: controller,
-                              padding: const EdgeInsets.all(16),
-                              gridDelegate:
-                                  const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                childAspectRatio: 2 / 3,
-                                crossAxisSpacing: 16,
-                                mainAxisSpacing: 16,
-                              ),
-                              itemCount: state.listUsers.length,
-                              itemBuilder: (_, index) {
-                                final item = state.listUsers[index];
-                                return Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        AppTheme.of(context).currentThemeKey ==
-                                                AppThemeKeys.dark
-                                            ? const Color(0xFF263238)
-                                            : Colors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        offset: const Offset(5, 5),
-                                        blurRadius: 15,
-                                        color: Colors.black.withOpacity(0.1),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          child: MyCachedImage(
-                                            item.avatar ?? '',
-                                            height: 100,
-                                            width: double.infinity,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      Text(
-                                        (item.firstName ?? '') +
-                                            (item.lastName ?? ''),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .subtitle1,
-                                      ),
-                                      Text(
-                                        item.email ?? '',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1,
-                                      )
-                                    ],
-                                  ),
-                                );
-                              })
+                          ? _buildGridView(state.listUsers, context)
                           : _buildListView(state.listUsers, context),
                     );
                   }
@@ -172,6 +108,64 @@ class _ListUsersViewState extends State<ListUsersView> {
         ],
       ),
     );
+  }
+
+  GridView _buildGridView(List<UserModel> users, BuildContext context) {
+    return GridView.builder(
+        controller: controller,
+        padding: const EdgeInsets.all(16),
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
+          childAspectRatio: 2 / 3,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
+        ),
+        itemCount: users.length,
+        itemBuilder: (_, index) {
+          final item = users[index];
+          return Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppTheme.of(context).currentThemeKey == AppThemeKeys.dark
+                  ? const Color(0xFF263238)
+                  : Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  offset: const Offset(5, 5),
+                  blurRadius: 15,
+                  color: Colors.black.withOpacity(0.1),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: MyCachedImage(
+                      item.avatar ?? '',
+                      height: 100,
+                      width: double.infinity,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  (item.firstName ?? '') + (item.lastName ?? ''),
+                  style: Theme.of(context).textTheme.subtitle1,
+                ),
+                Text(
+                  item.email ?? '',
+                  style: Theme.of(context).textTheme.bodyText1,
+                )
+              ],
+            ),
+          );
+        });
   }
 
   ListView _buildListView(List<UserModel> users, BuildContext context) {

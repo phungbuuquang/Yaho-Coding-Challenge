@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yahoapp/features/list_users/views/list_users_view.dart';
 import 'package:yahoapp/routes/routes_management.dart';
 import 'package:yahoapp/themes/themes.dart';
 
